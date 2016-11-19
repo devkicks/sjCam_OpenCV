@@ -1,4 +1,4 @@
-﻿Build started 19/11/2016 22:37:19.
+﻿Build started 19/11/2016 23:19:44.
      1>Project "C:\Researchwork\VCProj\sjcamOpenCV\sjcamOpenCV\sjcamOpenCV.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\sjcamOpenCV.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -23,4 +23,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:06.93
+Time Elapsed 00:00:06.42

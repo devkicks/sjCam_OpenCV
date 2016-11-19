@@ -29,7 +29,7 @@ DWORD WINAPI readImage(LPVOID lpParameter)
 				sjCam.retrieve(bufferM);
 		}
 
-		if(!imageVec.size())
+		if(imageVec.size() == 0 && !bufferM.empty())
 		{
 			
 				imageVec.push_back(bufferM);
@@ -44,8 +44,8 @@ int main()
 {
 
 	//cv::VideoCapture sjCam;
-	sjCam.open("rtsp://192.168.1.254/sjcam.mov"); 
-	//sjCam.open(0); 
+	//sjCam.open("rtsp://192.168.1.254/sjcam.mov"); 
+	sjCam.open(0); 
 	// URL for SJCAM - it may be different for other wifi cameras
 
 	if(!sjCam.isOpened())
