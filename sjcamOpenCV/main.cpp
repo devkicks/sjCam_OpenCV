@@ -10,12 +10,42 @@
 #include "opencv\cv.h"
 #include "opencv\highgui.h"
 #include <iostream>
+#include <windows.h>
+
+cv::VideoCapture sjCam;
+cv::vector<cv::Mat> imageVec;
+cv::Mat bufferM; 
+char ch = ' ';
+
+
+// thread to keep on reading images into memory to prevent decoding error
+// write to shared vector only when we need the images
+DWORD WINAPI readImage(LPVOID lpParameter)
+{
+	while(ch != 'q')
+	{
+		if(sjCam.grab())
+		{
+				sjCam.retrieve(bufferM);
+		}
+
+		if(!imageVec.size())
+		{
+			
+				imageVec.push_back(bufferM);
+		//	}
+		}
+	}
+	return 0;
+}
+
 
 int main()
 {
 
-	cv::VideoCapture sjCam;
+	//cv::VideoCapture sjCam;
 	sjCam.open("rtsp://192.168.1.254/sjcam.mov"); 
+	//sjCam.open(0); 
 	// URL for SJCAM - it may be different for other wifi cameras
 
 	if(!sjCam.isOpened())
@@ -25,16 +55,25 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	cv::Mat inImage; // container for storing our incoming stream of images
+	//cv::Mat inImage; // container for storing our incoming stream of images
+	DWORD myThreadID;
+	HANDLE myHandle = CreateThread(0, 0, readImage, 0, 0, &myThreadID);
+
 
 	// character to get input from waitkey function
-	char ch = ' ';
+	//char ch = ' ';
+	cv::Mat inImage;
 
 	while(ch != 'q')
 	{
 		// grab the current frame and retrieve it using mat container
-		if(sjCam.grab())
-			sjCam.retrieve(inImage);
+		//if(sjCam.grab())
+		//sjCam.retrieve(inImage);
+		if(imageVec.size() == 1)
+		{
+			inImage = imageVec[0];
+			imageVec.pop_back();
+		}
 
 		// check if the image was successfully downloaded
 		if(!inImage.empty())
@@ -44,9 +83,11 @@ int main()
 
 			cv::imshow("SJCAM Stream", inImage);
 
-			ch = cv::waitKey(1);
+			ch = cv::waitKey(100);
 		}
 	}
 
+	WaitForSingleObject(myHandle, INFINITE);
+	CloseHandle(myHandle);
 	return 1;
 }
