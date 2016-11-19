@@ -1,0 +1,11 @@
+Debug Libs:
+
+opencv_core2413d.lib
+opencv_highgui2413d.lib
+opencv_imgproc2413d.lib
+
+RELEASE Libs:
+
+opencv_core2413.lib
+opencv_highgui2413.lib
+opencv_imgproc2413.lib
